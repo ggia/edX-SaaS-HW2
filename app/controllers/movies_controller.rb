@@ -7,8 +7,14 @@ class MoviesController < ApplicationController
   end
 
   def index
-    if params[:sort_by] 
+
+    @all_ratings = Movie.select(:rating).map(&:rating).uniq
+    case
+    when params[:sort_by]
       @movies = Movie.order(params[:sort_by])
+    when params[:ratings]
+      @movies = Movie.where(rating: params[:ratings].keys)
+
     else
       @movies = Movie.all
     end
