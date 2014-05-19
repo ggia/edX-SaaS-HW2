@@ -9,17 +9,34 @@ class MoviesController < ApplicationController
   def index
 
     @all_ratings = Movie.select(:rating).map(&:rating).uniq
+    @ratings = @all_ratings
     case
     when params[:sort_by]
+      session[:sort_by] = params[:sort_by]
       @movies = Movie.order(params[:sort_by])
     when params[:ratings]
+      session[:ratings] = params[:ratings]
       @movies = Movie.where(rating: params[:ratings].keys)
-
+      @ratings = params[:ratings]
+    when params[:sort_by] && params[:ratings]
+      @movies = Movie.where(rating: params[:ratings].keys.order(params[:sort_by]))
     else
       @movies = Movie.all
     end
 
   end
+
+  def movie_sort(sort_by, ratings)
+    if sort_by == nil
+      sort = ""
+    else
+      sort = sort_by
+    end
+    ratings = ratings == :rating ? ratings : nil
+    return Movie.
+    end
+  end
+
 
 
   def new
